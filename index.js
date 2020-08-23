@@ -23,7 +23,8 @@ module.exports = {
                 destDir: path.resolve(worktreePath, pluginConfig.destDir || ""),
                 repo: pluginConfig.repo || myRepo,
                 branch: pluginConfig.branch || "gh-pages",
-                commitMessage: pluginConfig.commitMessage || "Deployed %@"
+                commitMessage: pluginConfig.commitMessage || "Deployed %@",
+                skipUpload: pluginConfig.skipUpload
               }
             };
           })
@@ -38,6 +39,12 @@ module.exports = {
       },
       upload: function(context) {
         var d = context.gitDeploy;
+
+        if (d.skipUpload) {
+          console.log('Upload skipped');
+          return;
+        }
+
         var distDir =
           context.distDir || path.join(context.project.root, "dist");
         return git
